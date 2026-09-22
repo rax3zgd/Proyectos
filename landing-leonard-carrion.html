@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leonard Carrión Morales — Desarrollo Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12141A;
+    --surface:#1B1E27;
+    --surface-2:#20232D;
+    --text:#EDEEF0;
+    --text-muted:#9AA0AE;
+    --accent:#E3B341;
+    --accent-2:#4FA9A2;
+    --border:#2A2E3A;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:inherit;margin:0;padding:0;}
+  html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    line-height:1.6;
+    min-height:100%;
+  }
+  ::selection{background:var(--accent);color:#12141A;}
+  a{color:inherit;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;}
+
+  header.nav{
+    position:sticky;top:env(safe-area-inset-top,0px);
+    background:rgba(18,20,26,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+    z-index:10;
+  }
+  .nav-inner{
+    max-width:920px;margin:0 auto;padding:16px 24px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .nav-brand{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;color:var(--accent-2);
+  }
+  .nav-links{display:flex;gap:24px;list-style:none;font-size:14px;}
+  .nav-links a{text-decoration:none;color:var(--text-muted);transition:color .15s ease;}
+  .nav-links a:hover,.nav-links a:focus-visible{color:var(--text);}
+
+  main{padding-top:64px;}
+
+  .hero{padding:48px 0 72px;display:grid;gap:40px;}
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:clamp(32px,5vw,48px);
+    font-weight:700;
+    line-height:1.15;
+    max-width:14ch;
+  }
+  .hero p.lede{
+    margin-top:16px;
+    color:var(--text-muted);
+    font-size:18px;
+    max-width:54ch;
+  }
+  .hero .cta-row{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;padding:11px 20px;border-radius:6px;
+    font-size:14px;font-weight:500;text-decoration:none;
+    border:1px solid var(--border);transition:border-color .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--accent);color:#12141A;border-color:var(--accent);font-weight:600;}
+  .btn-primary:hover{background:#f0c460;}
+  .btn-ghost{color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text-muted);}
+
+  .terminal{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.5);
+  }
+  .terminal-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:10px 14px;background:var(--surface-2);
+    border-bottom:1px solid var(--border);
+  }
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot-r{background:#e06c75;} .dot-y{background:#e5c07b;} .dot-g{background:#98c379;}
+  .terminal-title{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
+  .terminal-body{
+    padding:20px 18px;font-family:'JetBrains Mono',monospace;
+    font-size:13.5px;color:#c9d1d9;min-height:180px;
+  }
+  .terminal-body .prompt{color:var(--accent-2);}
+  .terminal-body .out{color:var(--text-muted);}
+  .caret{display:inline-block;width:8px;height:1em;background:var(--accent);vertical-align:-2px;animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  section{padding:56px 0;border-top:1px solid var(--border);}
+  section h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:24px;font-weight:600;margin-bottom:24px;
+  }
+  section h2 .idx{color:var(--text-muted);font-weight:500;margin-right:10px;}
+
+  .card-grid{display:grid;gap:16px;grid-template-columns:1fr;}
+  @media(min-width:640px){.card-grid{grid-template-columns:1fr 1fr;}}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:20px;display:flex;flex-direction:column;gap:10px;
+  }
+  .card h3{font-size:16px;font-weight:600;}
+  .card p{color:var(--text-muted);font-size:14px;}
+  .card .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    color:var(--accent-2);background:rgba(79,169,162,0.1);
+    border:1px solid rgba(79,169,162,0.3);
+    padding:3px 8px;border-radius:5px;
+  }
+  .card .status{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:var(--text-muted);
+  }
+  .card a.repo-link{font-size:13px;color:var(--accent);text-decoration:none;margin-top:auto;}
+  .card a.repo-link:hover{text-decoration:underline;}
+
+  .skills-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-chip{
+    font-family:'JetBrains Mono',monospace;font-size:13px;
+    padding:6px 12px;border-radius:6px;
+    background:var(--surface);border:1px solid var(--border);color:var(--text);
+  }
+
+  .timeline{display:flex;flex-direction:column;gap:20px;}
+  .t-item{display:grid;grid-template-columns:110px 1fr;gap:16px;}
+  .t-item .t-date{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-muted);padding-top:2px;}
+  .t-item .t-role{font-weight:600;font-size:15px;}
+  .t-item .t-org{color:var(--accent-2);font-size:14px;margin-left:6px;}
+  .t-item p{color:var(--text-muted);font-size:14px;margin-top:4px;}
+
+  .contact p{color:var(--text-muted);max-width:50ch;}
+  .contact-list{margin-top:20px;display:flex;flex-direction:column;gap:10px;font-size:15px;}
+  .contact-list a{text-decoration:none;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:1px;}
+  .contact-list a:hover{border-color:var(--accent);color:var(--accent);}
+
+  footer{padding:28px 0 40px;text-align:center;color:var(--text-muted);font-size:13px;}
+
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .caret{animation:none;opacity:1;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">leonard@dev:~$</span>
+    <ul class="nav-links">
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experiencia">Experiencia</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Leonard Carrión Morales</h1>
+      <p class="lede">Estudiante de Desarrollo de Aplicaciones Web en Barcelona, buscando prácticas para aplicar lo aprendido en un entorno real. Aprendo rápido y vengo de trabajos donde la responsabilidad y la atención al detalle no son opcionales.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#proyectos">Ver proyectos</a>
+        <a class="btn btn-ghost" href="#contacto">Contactar</a>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+        <span class="terminal-title">leonard@localhost — zsh</span>
+      </div>
+      <div class="terminal-body" id="termBody"></div>
+    </div>
+  </section>
+
+  <section id="proyectos">
+    <h2><span class="idx">01</span>Proyectos</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Landing page personal</h3>
+        <p>Esta misma página: maquetación responsive, sección hero animada y organización de contenido por bloques.</p>
+        <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span></div>
+        <span class="status">— sustituye este enlace por tu repo real</span>
+        <a class="repo-link" href="https://github.com/leonardcarrion" target="_blank" rel="noopener">Ver repositorio →</a>
+      </div>
+      <div class="card">
+        <h3>Gestor de tareas en consola</h3>
+        <p>Aplicación de línea de comandos en Python para crear, listar, completar y borrar tareas, con persistencia en un archivo JSON.</p>
+        <div class="tag-row"><span class="tag">Python</span><span class="tag">JSON</span><span class="tag">CLI</span></div>
+        <span class="status">— sustituye este enlace por tu repo real</span>
+        <a class="repo-link" href="https://github.com/leonardcarrion" target="_blank" rel="noopener">Ver repositorio →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2><span class="idx">02</span>Skills técnicas</h2>
+    <div class="skills-grid">
+      <span class="skill-chip">HTML</span>
+      <span class="skill-chip">CSS</span>
+      <span class="skill-chip">Java (básico)</span>
+      <span class="skill-chip">Python (básico)</span>
+      <span class="skill-chip">C++ (básico)</span>
+      <span class="skill-chip">Visual Studio</span>
+      <span class="skill-chip">Cisco Packet Tracer</span>
+      <span class="skill-chip">Git / GitHub</span>
+    </div>
+  </section>
+
+  <section id="experiencia">
+    <h2><span class="idx">03</span>Experiencia</h2>
+    <div class="timeline">
+      <div class="t-item">
+        <span class="t-date">2025</span>
+        <div>
+          <span class="t-role">Ayudante de Inventario</span><span class="t-org">Leroy Merlin</span>
+          <p>Recuento y control de stock, organización de almacén y verificación de referencias.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <span class="t-date">2025</span>
+        <div>
+          <span class="t-role">Reponedor</span><span class="t-org">Carrefour</span>
+          <p>Reposición de producto, control de caducidades y atención básica al cliente.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <span class="t-date">2019–21</span>
+        <div>
+          <span class="t-role">Mozo de almacén</span>
+          <p>Recepción, organización y preparación de pedidos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact">
+    <h2><span class="idx">04</span>Contacto</h2>
+    <p>Disponibilidad inmediata para incorporación en prácticas. Escríbeme por cualquiera de estos canales:</p>
+    <div class="contact-list">
+      <a href="mailto:leonardrex@hotmail.com">leonardrex@hotmail.com</a>
+      <a href="tel:+34631045120">631 045 120</a>
+      <a href="https://linkedin.com/in/leonard-carrion" target="_blank" rel="noopener">linkedin.com/in/leonard-carrion</a>
+      <a href="https://github.com/leonardcarrion" target="_blank" rel="noopener">github.com/leonardcarrion</a>
+    </div>
+  </section>
+</main>
+
+<footer>Barcelona · hecho con HTML y CSS</footer>
+
+<script>
+(function(){
+  var lines = [
+    {p:"whoami", o:"leonard_carrion_morales"},
+    {p:"cat perfil.txt", o:"Estudiante DAW · Grado Superior en curso · Barcelona"},
+    {p:"cat disponibilidad.txt", o:"Inmediata para prácticas"}
+  ];
+  var el = document.getElementById('termBody');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderStatic(){
+    var html = '';
+    lines.forEach(function(l){
+      html += '<div><span class="prompt">leonard@localhost:~$</span> '+l.p+'</div><div class="out">'+l.o+'</div>';
+    });
+    html += '<div><span class="prompt">leonard@localhost:~$</span> <span class="caret"></span></div>';
+    el.innerHTML = html;
+  }
+
+  if(reduced){ renderStatic(); return; }
+
+  var li = 0, ci = 0, phase = 'type';
+  function tick(){
+    if(li >= lines.length){
+      el.innerHTML += '<div><span class="prompt">leonard@localhost:~$</span> <span class="caret"></span></div>';
+      return;
+    }
+    var current = lines[li];
+    if(phase === 'type'){
+      var soFar = current.p.slice(0, ci);
+      redraw(soFar, null);
+      if(ci < current.p.length){ ci++; setTimeout(tick, 32); }
+      else { phase = 'pause'; setTimeout(tick, 250); }
+    } else if(phase === 'pause'){
+      redraw(current.p, null);
+      phase = 'out'; setTimeout(tick, 120);
+    } else if(phase === 'out'){
+      redraw(current.p, current.o);
+      li++; ci = 0; phase = 'type';
+      setTimeout(tick, 260);
+    }
+  }
+
+  function redraw(promptText, outText){
+    var html = '';
+    for(var i=0;i<li;i++){
+      html += '<div><span class="prompt">leonard@localhost:~$</span> '+lines[i].p+'</div><div class="out">'+lines[i].o+'</div>';
+    }
+    html += '<div><span class="prompt">leonard@localhost:~$</span> '+promptText+'<span class="caret"></span></div>';
+    if(outText){ html += '<div class="out">'+outText+'</div>'; }
+    el.innerHTML = html;
+  }
+
+  tick();
+})();
+</script>
+
+</body>
+</html>
